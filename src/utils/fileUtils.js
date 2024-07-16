@@ -7,9 +7,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const dataFolder = path.resolve(__dirname, "../data");
-const locationsFilePath = path.join(dataFolder, "locations.json");
 
-const writeToJsonFile = (filename, data) => {
+export const writeToJsonFile = (filename, data) => {
   try {
     if (!fs.existsSync(dataFolder)) {
       fs.mkdirSync(dataFolder);
@@ -25,7 +24,7 @@ const writeToJsonFile = (filename, data) => {
   }
 };
 
-const readFromJsonFile = (filename) => {
+export const readFromJsonFile = (filename) => {
   try {
     const filePath = path.join(dataFolder, filename);
     if (!fs.existsSync(filePath)) return [];
@@ -37,12 +36,12 @@ const readFromJsonFile = (filename) => {
   }
 };
 
-const findCompanyByLocationId = (locationId) => {
+export const findCompanyByLocationId = (locationId) => {
   const locations = readFromJsonFile("locations.json");
   return locations.find((location) => location.id === locationId);
 };
 
-const saveLocationToJson = (location) => {
+export const saveLocationToJson = (location) => {
   try {
     const locations = readFromJsonFile("locations.json");
     if (!locations.find((loc) => loc.id === location.id)) {
@@ -54,10 +53,29 @@ const saveLocationToJson = (location) => {
   }
 };
 
-export {
-  writeToJsonFile,
-  readFromJsonFile,
-  findCompanyByLocationId,
-  saveLocationToJson,
-  locationsFilePath,
+export const updateCharacterWithHubspotId = (characterId, hubspotId) => {
+  try {
+    const characters = readFromJsonFile("primeCharacters.json");
+    const characterIndex = characters.findIndex(
+      (char) => char.id === characterId
+    );
+    if (characterIndex !== -1) {
+      characters[characterIndex].hubspotId = hubspotId;
+      writeToJsonFile("primeCharacters.json", characters);
+    }
+  } catch (error) {
+    console.error(
+      `Error updating character ${characterId} with hubspotId ${hubspotId}:`,
+      error
+    );
+  }
+};
+
+export const updateLocationWithHubspotCompanyId = (locationId, companyId) => {
+  const locations = readFromJsonFile("locations.json");
+  const locationIndex = locations.findIndex((loc) => loc.id === locationId);
+  if (locationIndex !== -1) {
+    locations[locationIndex].hubspotCompanyId = companyId;
+    writeToJsonFile("locations.json", locations);
+  }
 };

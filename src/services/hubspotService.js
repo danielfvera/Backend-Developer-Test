@@ -15,7 +15,7 @@ const createContact = async (character) => {
   const response = await hubspotClient.crm.contacts.basicApi.create(
     contactProperties
   );
-  return response.body;
+  return response;
 };
 
 const createCompany = async (location) => {
@@ -32,17 +32,36 @@ const createCompany = async (location) => {
   const response = await hubspotClient.crm.companies.basicApi.create(
     companyProperties
   );
-  return response.body;
+  return response;
 };
 
 const associateContactToCompany = async (contactId, companyId) => {
-  const associationType = "contact_to_company";
-  await hubspotClient.crm.contacts.associationsApi.create(
-    contactId,
-    "companies",
-    companyId,
-    associationType
-  );
+  try {
+    const objectType = "0-1";
+    const objectId = contactId.toString();
+    const toObjectType = "0-2";
+    const toObjectId = companyId.toString();
+    const AssociationSpec = [
+      {
+        associationCategory: "HUBSPOT_DEFINED",
+        associationTypeId: 279,
+      },
+    ];
+
+    await hubspotClient.crm.associations.v4.basicApi.create(
+      objectType,
+      objectId,
+      toObjectType,
+      toObjectId,
+      AssociationSpec
+    );
+    console.log(`Associated contact ${contactId} with company ${companyId}`);
+  } catch (error) {
+    console.error(
+      `Error associating contact ${contactId} with company ${companyId}:`,
+      error
+    );
+  }
 };
 
 export default {

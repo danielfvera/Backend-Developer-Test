@@ -2,15 +2,17 @@ import hubspotService from "../services/hubspotService.js";
 import rickAndMortyService from "../services/rickAndMortyService.js";
 import hubspotPropertyService from "../services/hubspotPropertyService.js";
 import { isPrime } from "../utils/helpers.js";
-import { writeToJsonFile } from "../utils/fileUtils.js";
 import {
   findCompanyByLocationId,
   saveLocationToJson,
+  updateCharacterWithHubspotId,
+  updateLocationWithHubspotCompanyId,
+  writeToJsonFile,
 } from "../utils/fileUtils.js";
 
 export const migrateData = async (req, res) => {
   try {
-    await hubspotPropertyService.createCustomProperties();
+    /* await hubspotPropertyService.createCustomProperties(); */
 
     const characters = await rickAndMortyService.fetchAllCharacters();
     const primeCharacters = characters.filter(
@@ -21,24 +23,53 @@ export const migrateData = async (req, res) => {
     let migratedCount = 0;
 
     for (const character of primeCharacters) {
-      /* const contact = await hubspotService.createContact(character); */
-      console.log(`Contact for character ${character.name} created in HubSpot`);
-      migratedCount++;
+      const contact = await hubspotService.createContact(character);
+      if (contact && contact.id) {
+        console.log(
+          `Contact for character ${character.name} created in HubSpot with ID ${contact.id}`
+        );
+        migratedCount++;
 
-      const location = await rickAndMortyService.fetchLocationByUrl(
-        character.location.url
-      );
-      if (location) {
-        const existingCompany = findCompanyByLocationId(location.id);
-        if (!existingCompany) {
-          const company = await hubspotService.createCompany(location);
-          console.log(`Company ${location.name} created in HubSpot`);
-          /* await hubspotService.associateContactToCompany(
-            contact.id,
-            company.id
-          ); */
-          saveLocationToJson(location); // Save the location after creating the company
+        updateCharacterWithHubspotId(character.id, contact.id);
+
+        const location = await rickAndMortyService.fetchLocationByUrl(
+          character.location.url
+        );
+        if (location) {
+          let company = findCompanyByLocationId(location.id);
+
+          let hubspotCompanyId;
+          if (company) {
+            // Use the existing HubSpot company ID
+            hubspotCompanyId = company.hubspotCompanyId;
+            console.log(
+              `Existing company found with HubSpot ID: ${hubspotCompanyId}`
+            );
+          } else {
+            // Create a new company in HubSpot
+            company = await hubspotService.createCompany(location);
+            if (company && company.id) {
+              console.log(`New company created with HubSpot ID: ${company.id}`);
+              saveLocationToJson(location);
+              updateLocationWithHubspotCompanyId(location.id, company.id);
+              hubspotCompanyId = company.id;
+            }
+          }
+
+          if (hubspotCompanyId) {
+            await hubspotService.associateContactToCompany(
+              contact.id,
+              hubspotCompanyId
+            );
+            console.log(
+              `Contact ${contact.id} associated with Company ${hubspotCompanyId}`
+            );
+          }
         }
+      } else {
+        console.error(
+          `Failed to create contact for character ${character.name}`
+        );
       }
     }
 

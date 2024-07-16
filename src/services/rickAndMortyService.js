@@ -1,10 +1,4 @@
 import { getCharacters, getLocation } from "rickmortyapi";
-import {
-  writeToJsonFile,
-  readFromJsonFile,
-  findCompanyByLocationId,
-  locationsFilePath,
-} from "../utils/fileUtils.js";
 
 const fetchAllCharacters = async () => {
   let allCharacters = [];
