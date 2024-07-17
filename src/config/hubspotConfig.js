@@ -1,5 +1,10 @@
 import { Client } from "@hubspot/api-client";
 
-const hubspotClient = new Client({ accessToken: process.env.HUBSPOT_API_KEY });
+const hubspotClientPrimary = new Client({
+  accessToken: process.env.HUBSPOT_API_KEY,
+});
+const hubspotClientMirror = new Client({
+  accessToken: process.env.HUBSPOT_MIRROR_API_KEY,
+});
 
-export default hubspotClient;
+export { hubspotClientPrimary, hubspotClientMirror };

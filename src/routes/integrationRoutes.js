@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { migrateData } from "../controllers/migrationController.js";
+import {
+  updateContacts,
+  updateCompanies,
+} from "../controllers/integrationController.js";
 
 const router = Router();
 
-router.get("/migrate", migrateData);
+router.post("/contacts", updateContacts);
+router.post("/companies", updateCompanies);
 
 export default router;

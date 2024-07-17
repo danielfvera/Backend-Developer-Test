@@ -1,4 +1,7 @@
-import hubspotClient from "../config/hubspotConfig.js";
+import {
+  hubspotClientPrimary,
+  hubspotClientMirror,
+} from "../config/hubspotConfig.js";
 
 const createContact = async (character) => {
   const contactProperties = {
@@ -12,7 +15,7 @@ const createContact = async (character) => {
     },
   };
 
-  const response = await hubspotClient.crm.contacts.basicApi.create(
+  const response = await hubspotClientPrimary.crm.contacts.basicApi.create(
     contactProperties
   );
   return response;
@@ -29,7 +32,7 @@ const createCompany = async (location) => {
     },
   };
 
-  const response = await hubspotClient.crm.companies.basicApi.create(
+  const response = await hubspotClientPrimary.crm.companies.basicApi.create(
     companyProperties
   );
   return response;
@@ -48,7 +51,7 @@ const associateContactToCompany = async (contactId, companyId) => {
       },
     ];
 
-    await hubspotClient.crm.associations.v4.basicApi.create(
+    await hubspotClientPrimary.crm.associations.v4.basicApi.create(
       objectType,
       objectId,
       toObjectType,
@@ -64,8 +67,81 @@ const associateContactToCompany = async (contactId, companyId) => {
   }
 };
 
+const createMirrorContact = async (character, hubspotClient) => {
+  const contactProperties = {
+    properties: {
+      character_id: character.properties.character_id.value,
+      firstname: character.properties.firstname.value,
+      lastname: character.properties.lastname.value,
+      status_character: character.properties.status_character.value,
+      character_species: character.properties.character_species.value,
+      character_gender: character.properties.character_gender.value,
+    },
+  };
+
+  const response = await hubspotClient.crm.contacts.basicApi.create(
+    contactProperties
+  );
+  return response;
+};
+const createMirrorCompany = async (company, hubspotClient) => {
+  const contactProperties = {
+    properties: {
+      location_id: company.properties.location_id.value,
+      name: company.properties.name.value,
+      location_type: company.properties.location_type.value,
+      dimension: company.properties.dimension.value,
+      creation_date: company.properties.creation_date.value,
+    },
+  };
+
+  const response = await hubspotClient.crm.companies.basicApi.create(
+    contactProperties
+  );
+  return response;
+};
+
+const updateContact = async (contactId, contact, hubspotClient) => {
+  const contactProperties = {
+    properties: {
+      character_id: contact.properties.character_id.value,
+      firstname: contact.properties.firstname.value,
+      lastname: contact.properties.lastname.value,
+      status_character: contact.properties.status_character.value,
+      character_species: contact.properties.character_species.value,
+      character_gender: contact.properties.character_gender.value,
+    },
+  };
+
+  await hubspotClient.crm.contacts.basicApi.update(
+    contactId,
+    contactProperties
+  );
+};
+
+const updateCompany = async (companyId, company, hubspotClient) => {
+  const companyProperties = {
+    properties: {
+      location_id: company.properties.location_id.value,
+      name: company.properties.name.value,
+      location_type: company.properties.location_type.value,
+      dimension: company.properties.dimension.value,
+      creation_date: company.properties.creation_date.value,
+    },
+  };
+
+  await hubspotClient.crm.companies.basicApi.update(
+    companyId,
+    companyProperties
+  );
+};
+
 export default {
   createContact,
   createCompany,
   associateContactToCompany,
+  createMirrorContact,
+  createMirrorCompany,
+  updateContact,
+  updateCompany,
 };

@@ -36,6 +36,11 @@ export const readFromJsonFile = (filename) => {
   }
 };
 
+export const findContactByCharacterId = (characterId) => {
+  const primeCharacters = readFromJsonFile("primeCharacters.json");
+  return primeCharacters.find((char) => char.id === characterId);
+};
+
 export const findCompanyByLocationId = (locationId) => {
   const locations = readFromJsonFile("locations.json");
   return locations.find((location) => location.id === locationId);
@@ -53,29 +58,39 @@ export const saveLocationToJson = (location) => {
   }
 };
 
-export const updateCharacterWithHubspotId = (characterId, hubspotId) => {
+export const updateCharacterWithHubspotId = (
+  characterId,
+  hubspotId,
+  keyName
+) => {
   try {
     const characters = readFromJsonFile("primeCharacters.json");
     const characterIndex = characters.findIndex(
-      (char) => char.id === characterId
+      (char) => char.id === Number(characterId)
     );
     if (characterIndex !== -1) {
-      characters[characterIndex].hubspotId = hubspotId;
+      characters[characterIndex][keyName] = hubspotId;
       writeToJsonFile("primeCharacters.json", characters);
     }
   } catch (error) {
     console.error(
-      `Error updating character ${characterId} with hubspotId ${hubspotId}:`,
+      `Error updating character ${characterId} with ${keyName} ${hubspotId}:`,
       error
     );
   }
 };
 
-export const updateLocationWithHubspotCompanyId = (locationId, companyId) => {
+export const updateLocationWithHubspotCompanyId = (
+  locationId,
+  companyId,
+  keyName
+) => {
   const locations = readFromJsonFile("locations.json");
-  const locationIndex = locations.findIndex((loc) => loc.id === locationId);
+  const locationIndex = locations.findIndex(
+    (loc) => loc.id === Number(locationId)
+  );
   if (locationIndex !== -1) {
-    locations[locationIndex].hubspotCompanyId = companyId;
+    locations[locationIndex][keyName] = companyId;
     writeToJsonFile("locations.json", locations);
   }
 };

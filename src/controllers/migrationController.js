@@ -1,6 +1,5 @@
 import hubspotService from "../services/hubspotService.js";
 import rickAndMortyService from "../services/rickAndMortyService.js";
-import hubspotPropertyService from "../services/hubspotPropertyService.js";
 import { isPrime } from "../utils/helpers.js";
 import {
   findCompanyByLocationId,
@@ -12,7 +11,7 @@ import {
 
 export const migrateData = async (req, res) => {
   try {
-    /* await hubspotPropertyService.createCustomProperties(); */
+    const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const characters = await rickAndMortyService.fetchAllCharacters();
     const primeCharacters = characters.filter(
@@ -24,13 +23,15 @@ export const migrateData = async (req, res) => {
 
     for (const character of primeCharacters) {
       const contact = await hubspotService.createContact(character);
+      await pause(300);
+
       if (contact && contact.id) {
         console.log(
           `Contact for character ${character.name} created in HubSpot with ID ${contact.id}`
         );
         migratedCount++;
 
-        updateCharacterWithHubspotId(character.id, contact.id);
+        updateCharacterWithHubspotId(character.id, contact.id, "hubspotId");
 
         const location = await rickAndMortyService.fetchLocationByUrl(
           character.location.url
