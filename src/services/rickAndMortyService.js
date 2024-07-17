@@ -13,7 +13,7 @@ const fetchAllCharacters = async () => {
       console.log(`Page ${page} fetched successfully.`);
       allCharacters = allCharacters.concat(results);
       page++;
-      await pause(600);
+      await pause(200);
       hasNextPage = info.next !== null;
     } catch (error) {
       console.error(`Error fetching page ${page}:`, error);

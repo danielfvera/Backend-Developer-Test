@@ -10,6 +10,8 @@ import {
 } from "../utils/fileUtils.js";
 
 export const migrateData = async (req, res) => {
+  writeToJsonFile("primeCharacters.json", []);
+  writeToJsonFile("locations.json", []);
   try {
     const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
