@@ -1,6 +1,7 @@
 import { getCharacters, getLocation } from "rickmortyapi";
 
 const fetchAllCharacters = async () => {
+  const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   let allCharacters = [];
   let page = 1;
   let hasNextPage = true;
@@ -12,6 +13,7 @@ const fetchAllCharacters = async () => {
       console.log(`Page ${page} fetched successfully.`);
       allCharacters = allCharacters.concat(results);
       page++;
+      await pause(600);
       hasNextPage = info.next !== null;
     } catch (error) {
       console.error(`Error fetching page ${page}:`, error);
