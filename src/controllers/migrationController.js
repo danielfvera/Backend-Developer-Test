@@ -34,6 +34,7 @@ export const migrateData = async (req, res) => {
         migratedCount++;
 
         updateCharacterWithHubspotId(character.id, contact.id, "hubspotId");
+        await pause(200);
 
         const location = await rickAndMortyService.fetchLocationByUrl(
           character.location.url
@@ -53,6 +54,7 @@ export const migrateData = async (req, res) => {
             company = await hubspotService.createCompany(location);
             if (company && company.id) {
               console.log(`New company created with HubSpot ID: ${company.id}`);
+              await pause(200);
               saveLocationToJson(location);
               updateLocationWithHubspotCompanyId(location.id, company.id);
               hubspotCompanyId = company.id;
@@ -60,6 +62,7 @@ export const migrateData = async (req, res) => {
           }
 
           if (hubspotCompanyId) {
+            await pause(200);
             await hubspotService.associateContactToCompany(
               contact.id,
               hubspotCompanyId
