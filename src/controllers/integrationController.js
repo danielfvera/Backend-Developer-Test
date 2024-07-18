@@ -1,7 +1,4 @@
-import {
-  hubspotClientPrimary,
-  hubspotClientMirror,
-} from "../config/hubspotConfig.js";
+import { hubspotClientMirror } from "../config/hubspotConfig.js";
 import hubspotService from "../services/hubspotService.js";
 import {
   findCompanyByLocationId,
