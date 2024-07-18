@@ -16,9 +16,7 @@ export const updateContacts = async (req, res) => {
     const characterId = Number(contact.properties.character_id.value);
     const hubspotIdMirror =
       findContactByCharacterId(characterId)?.hubspotIdMirror;
-    console.log(hubspotIdMirror);
     if (hubspotIdMirror) {
-      console.log("enter already created");
       // Update existing contact in mirror account
       await hubspotService.updateContact(
         hubspotIdMirror,
@@ -26,13 +24,11 @@ export const updateContacts = async (req, res) => {
         hubspotClientMirror
       );
     } else {
-      console.log("to create");
       // Create new contact in mirror account
       const newHubspotId = await hubspotService.createMirrorContact(
         contact,
         hubspotClientMirror
       );
-      console.log(newHubspotId.id);
       updateCharacterWithHubspotId(
         characterId,
         newHubspotId.id,
@@ -52,9 +48,7 @@ export const updateCompanies = async (req, res) => {
     const locationId = Number(company.properties.location_id.value);
     const hubspotCompanyIdMirror =
       findCompanyByLocationId(locationId)?.hubspotCompanyIdMirror;
-    console.log(hubspotCompanyIdMirror);
     if (hubspotCompanyIdMirror) {
-      console.log("company already created");
       // Update existing company in mirror account
       await hubspotService.updateCompany(
         hubspotCompanyIdMirror,
@@ -62,13 +56,11 @@ export const updateCompanies = async (req, res) => {
         hubspotClientMirror
       );
     } else {
-      console.log("company to create");
       // Create new company in mirror account
       const newHubspotId = await hubspotService.createMirrorCompany(
         company,
         hubspotClientMirror
       );
-      console.log(newHubspotId.id);
       updateLocationWithHubspotCompanyId(
         locationId,
         newHubspotId.id,
