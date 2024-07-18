@@ -85,4 +85,4 @@ or :
 ```javascript
 http://backend-developer-test.onrender.com/api/integrate/companies
 ``` 
-
+![HubSpot RickAndMorty Integration Diagram](https://github.com/danielfvera/Backend-Developer-Test/blob/main/assets/HubSpot-RickAndMorty-Integration-Diagram.png?raw=true)
