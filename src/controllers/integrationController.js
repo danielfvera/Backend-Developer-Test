@@ -13,7 +13,7 @@ import {
 export const updateContacts = async (req, res) => {
   try {
     const contact = req.body;
-    const characterId = Number(contact.properties.character_id.value);
+    const characterId = Number(contact.properties.character_id?.value);
     const hubspotIdMirror =
       findContactByCharacterId(characterId)?.hubspotIdMirror;
     if (hubspotIdMirror) {
@@ -45,7 +45,7 @@ export const updateContacts = async (req, res) => {
 export const updateCompanies = async (req, res) => {
   try {
     const company = req.body;
-    const locationId = Number(company.properties.location_id.value);
+    const locationId = Number(company.properties.location_id?.value);
     const hubspotCompanyIdMirror =
       findCompanyByLocationId(locationId)?.hubspotCompanyIdMirror;
     if (hubspotCompanyIdMirror) {

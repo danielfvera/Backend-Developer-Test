@@ -70,12 +70,12 @@ const associateContactToCompany = async (contactId, companyId) => {
 const createMirrorContact = async (character, hubspotClient) => {
   const contactProperties = {
     properties: {
-      character_id: character.properties.character_id.value,
-      firstname: character.properties.firstname.value,
-      lastname: character.properties.lastname.value,
-      status_character: character.properties.status_character.value,
-      character_species: character.properties.character_species.value,
-      character_gender: character.properties.character_gender.value,
+      character_id: character.properties.character_id?.value,
+      firstname: character.properties.firstname?.value,
+      lastname: character.properties.lastname?.value,
+      status_character: character.properties.status_character?.value,
+      character_species: character.properties.character_species?.value,
+      character_gender: character.properties.character_gender?.value,
     },
   };
 
@@ -87,11 +87,11 @@ const createMirrorContact = async (character, hubspotClient) => {
 const createMirrorCompany = async (company, hubspotClient) => {
   const contactProperties = {
     properties: {
-      location_id: company.properties.location_id.value,
-      name: company.properties.name.value,
-      location_type: company.properties.location_type.value,
-      dimension: company.properties.dimension.value,
-      creation_date: company.properties.creation_date.value,
+      location_id: company.properties.location_id?.value,
+      name: company.properties.name?.value,
+      location_type: company.properties.location_type?.value,
+      dimension: company.properties.dimension?.value,
+      creation_date: company.properties.creation_date?.value,
     },
   };
 
@@ -104,12 +104,12 @@ const createMirrorCompany = async (company, hubspotClient) => {
 const updateContact = async (contactId, contact, hubspotClient) => {
   const contactProperties = {
     properties: {
-      character_id: contact.properties.character_id.value,
-      firstname: contact.properties.firstname.value,
-      lastname: contact.properties.lastname.value,
-      status_character: contact.properties.status_character.value,
-      character_species: contact.properties.character_species.value,
-      character_gender: contact.properties.character_gender.value,
+      character_id: contact.properties.character_id?.value,
+      firstname: contact.properties.firstname?.value,
+      lastname: contact.properties.lastname?.value,
+      status_character: contact.properties.status_character?.value,
+      character_species: contact.properties.character_species?.value,
+      character_gender: contact.properties.character_gender?.value,
     },
   };
 
@@ -122,11 +122,11 @@ const updateContact = async (contactId, contact, hubspotClient) => {
 const updateCompany = async (companyId, company, hubspotClient) => {
   const companyProperties = {
     properties: {
-      location_id: company.properties.location_id.value,
-      name: company.properties.name.value,
-      location_type: company.properties.location_type.value,
-      dimension: company.properties.dimension.value,
-      creation_date: company.properties.creation_date.value,
+      location_id: company.properties.location_id?.value,
+      name: company.properties.name?.value,
+      location_type: company.properties.location_type?.value,
+      dimension: company.properties.dimension?.value,
+      creation_date: company.properties.creation_date?.value,
     },
   };
 
